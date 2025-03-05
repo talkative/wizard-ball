@@ -55,7 +55,7 @@ export class MainScene extends Phaser.Scene {
   }
 
   private setupMusic() {
-    const bgm = this.sound.add("bgm", { loop: true });
+    const bgm = this.sound.add("bgm", { loop: true, volume: 0.2 });
     bgm.play();
   }
 
@@ -68,7 +68,11 @@ export class MainScene extends Phaser.Scene {
   }
 
   private setupNet() {
-    this.net = this.physics.add.sprite(600, 1000, "net");
+    this.net = this.physics.add.sprite(
+      this.cameras.main.width / 2,
+      1000,
+      "net"
+    );
     this.net.setImmovable(true);
     this.net.setCollideWorldBounds(true);
 
@@ -88,7 +92,6 @@ export class MainScene extends Phaser.Scene {
     this.physics.add.collider(this.net, this.playerTwo);
     this.physics.add.collider(this.ball, this.platforms);
 
-    // Replace the simple colliders with ones that include the collision handler
     this.physics.add.collider(
       this.ball,
       this.playerOne,
@@ -113,11 +116,10 @@ export class MainScene extends Phaser.Scene {
     const playerObj = player as Player;
     if (!ballObj || !playerObj.body) return;
 
-    // Calculate force based on player velocity
     const playerVelocity = playerObj?.body.velocity;
 
     // The force is based on player's velocity and a force multiplier
-    const forceMultiplier = 1.5;
+    const forceMultiplier = 1.2;
     let forceX = playerVelocity.x * forceMultiplier;
     let forceY = playerVelocity.y * forceMultiplier;
 
@@ -137,7 +139,7 @@ export class MainScene extends Phaser.Scene {
     ballObj.applyForce(forceX, forceY);
 
     // Optionally play a hit sound
-    // this.sound.play('hit');
+    this.sound.play("ballhit");
   }
 
   private setupGravityEffects() {

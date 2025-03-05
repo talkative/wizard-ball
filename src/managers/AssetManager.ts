@@ -60,5 +60,6 @@ export class AssetManager {
 
   private preloadAudio() {
     this.scene.load.audio("bgm", "/assets/dnb.wav");
+    this.scene.load.audio("ballhit", "/assets/balleffect.wav");
   }
 }
