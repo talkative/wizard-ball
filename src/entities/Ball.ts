@@ -47,9 +47,6 @@ export class Ball extends Phaser.Physics.Arcade.Sprite {
         (this.width - radius * 2) / OFFSET,
         (this.height - radius * 2) / OFFSET
       );
-
-      // Add some drag to gradually slow the ball
-      this.body.setDrag(5, 0);
     }
   }
 

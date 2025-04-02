@@ -32,6 +32,16 @@ export class Player extends Phaser.Physics.Arcade.Sprite {
   private jumpSpeed: number = -1200;
   private walkSpeed: number = 160;
   private runSpeed: number = 600;
+  private animationPrefix: string = "player1";
+
+  public setAnimationPrefix(prefix: string) {
+    this.animationPrefix = prefix;
+  }
+
+  // Then use this.animationPrefix when playing animations
+  private playIdleAnimation() {
+    this.anims.play(`${this.animationPrefix}-idle-anim`, true);
+  }
 
   constructor(scene: Phaser.Scene, x: number, y: number, texture: string) {
     super(scene, x, y, texture);
@@ -91,8 +101,10 @@ export class Player extends Phaser.Physics.Arcade.Sprite {
   public update() {
     let controls;
 
+    console.log(this.controlScheme, "control scheme");
     switch (this.controlScheme) {
       case ControlScheme.GAMEPAD:
+        console.log(this.gamepad);
         if (!this.gamepad) return;
         controls = {
           up: this.gamepad.buttons[PlayerControls.UP].value,

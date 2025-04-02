@@ -9,7 +9,7 @@ export class ScoreManager {
   constructor(scene: Phaser.Scene) {
     this.pointsText = scene.add.text(10, 10, "Left: 0 | Right: 0", {
       font: "24px Arial",
-      fill: "#fff",
+      color: "#ffffff",
     });
   }
 

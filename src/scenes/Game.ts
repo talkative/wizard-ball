@@ -47,11 +47,17 @@ export class MainScene extends Phaser.Scene {
   }
 
   private setupBackground() {
-    this.add.image(
+    const bg = this.add.image(
       this.cameras.main.width / 2,
       this.cameras.main.height / 2,
       "background"
     );
+
+    // Scale the image to fill the screen
+    bg.setDisplaySize(this.cameras.main.width, this.cameras.main.height);
+
+    // Optionally set a lower depth to ensure it stays in the background
+    bg.setDepth(-1);
   }
 
   private setupMusic() {
@@ -61,7 +67,7 @@ export class MainScene extends Phaser.Scene {
 
   private setupPlayers() {
     this.playerOne = new Player(this, 400, 1300, "player-idle");
-    this.playerTwo = new Player(this, 800, 1300, "player-idle");
+    this.playerTwo = new Player(this, 800, 1300, "player2-idle");
 
     this.playerOne.useArrowControls();
     this.playerTwo.useWASDControls();

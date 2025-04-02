@@ -8,6 +8,18 @@ export class AnimationManager {
     this.scene = scene;
   }
 
+  private createCharacterAnimations(prefix: string) {
+    this.scene.anims.create({
+      key: `${prefix}-idle-anim`,
+      frames: this.scene.anims.generateFrameNumbers(`${prefix}-idle`, {
+        start: 0,
+        end: 7,
+      }),
+      frameRate: 10,
+      repeat: -1,
+    });
+  }
+
   public createAnimations() {
     this.scene.anims.create({
       key: "walk",
