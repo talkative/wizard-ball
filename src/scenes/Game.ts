@@ -20,6 +20,9 @@ export class MainScene extends Phaser.Scene {
   private assetManager!: AssetManager;
   private animationManager!: AnimationManager;
   private winningScore: number = 3;
+  private gameOverText!: Phaser.GameObjects.Text;
+  private restart!: Phaser.GameObjects.Text;
+  private winnerText!: Phaser.GameObjects.Text;
 
   constructor() {
     super("MainScene");
@@ -81,6 +84,7 @@ export class MainScene extends Phaser.Scene {
       this.countdownManager.destroy();
     }
 
+    // Determine winning text
     let winningText = "";
     if (this.scoreManager.getLeftScore() >= this.winningScore) {
       winningText = "Player One Wins!";
@@ -88,33 +92,81 @@ export class MainScene extends Phaser.Scene {
       winningText = "Player Two Wins!";
     }
 
-    const gameOverText = this.add.text(
-      this.cameras.main.width / 2,
-      this.cameras.main.height / 2,
-      "Game Over\n" + winningText,
-      {
-        font: "64px Arial",
-        color: "#ffffff",
-        align: "center",
-      }
-    );
-    gameOverText.setOrigin(0.5);
+    // Create a background panel for the game over screen
+    const panelWidth = 500;
+    const panelHeight = 300;
+    const panelX = this.cameras.main.width / 2 - panelWidth / 2;
+    const panelY = this.cameras.main.height / 2 - panelHeight / 2;
 
-    // Add a restart button
-    const restartButton = this.add.text(
-      this.cameras.main.width / 2,
-      this.cameras.main.height / 2 + 150,
-      "Restart Game",
-      {
-        font: "32px Arial",
-        color: "#ffffff",
-        backgroundColor: "#000000",
-        padding: { x: 20, y: 10 },
-      }
+    // Create graphics object for the background panel
+    const panelBg = this.add.graphics();
+    panelBg.fillStyle(0x000000, 0.8); // Semi-transparent black
+    panelBg.fillRoundedRect(panelX, panelY, panelWidth, panelHeight, 16); // Rounded corners
+    panelBg.lineStyle(4, 0xffffff, 1); // White border
+    panelBg.strokeRoundedRect(panelX, panelY, panelWidth, panelHeight, 16);
+
+    // Create the game over text
+    this.gameOverText = this.add
+      .text(this.cameras.main.width / 2, panelY + 80, "Game Over", {
+        fontSize: "64px",
+        color: "#fff",
+        align: "center",
+      })
+      .setOrigin(0.5);
+
+    // Create winner text
+    this.winnerText = this.add
+      .text(this.cameras.main.width / 2, panelY + 150, winningText, {
+        fontSize: "32px",
+        color: "#fff",
+        align: "center",
+      })
+      .setOrigin(0.5);
+
+    // Create restart button with its own background
+    const buttonBg = this.add.graphics();
+    buttonBg.fillStyle(0x333333, 1);
+    buttonBg.fillRoundedRect(
+      this.cameras.main.width / 2 - 75,
+      panelY + 210,
+      150,
+      50,
+      10
     );
-    restartButton.setOrigin(0.5);
-    restartButton.setInteractive({ useHandCursor: true });
-    restartButton.on("pointerdown", () => {
+
+    this.restart = this.add
+      .text(this.cameras.main.width / 2, panelY + 235, "Replay", {
+        fontSize: "32px",
+        color: "#fff",
+        align: "center",
+      })
+      .setOrigin(0.5);
+
+    // Make button interactive with hover effects
+    this.restart.setInteractive({ useHandCursor: true });
+    this.restart.on("pointerover", () => {
+      buttonBg.clear();
+      buttonBg.fillStyle(0x555555, 1); // Lighter color on hover
+      buttonBg.fillRoundedRect(
+        this.cameras.main.width / 2 - 75,
+        panelY + 210,
+        150,
+        50,
+        10
+      );
+    });
+    this.restart.on("pointerout", () => {
+      buttonBg.clear();
+      buttonBg.fillStyle(0x333333, 1); // Back to original color
+      buttonBg.fillRoundedRect(
+        this.cameras.main.width / 2 - 75,
+        panelY + 210,
+        150,
+        50,
+        10
+      );
+    });
+    this.restart.on("pointerdown", () => {
       this.scene.restart();
     });
   }
