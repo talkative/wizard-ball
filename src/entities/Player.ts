@@ -1,5 +1,5 @@
 // src/entities/Player.ts
-import Phaser from "phaser";
+import Phaser from 'phaser';
 
 export enum PlayerControls {
   UP = 12,
@@ -32,7 +32,12 @@ export class Player extends Phaser.Physics.Arcade.Sprite {
   private jumpSpeed: number = -1200;
   private walkSpeed: number = 160;
   private runSpeed: number = 600;
-  private animationPrefix: string = "player1";
+  private animationPrefix: string = 'player1';
+  // Configure hitbox
+  private hitboxWidth = 50; // Narrower for pill shape
+  private hitboxHeight = 100; // Taller for pill shape
+  private startingHitboxOffsetX = 0; // Adjust offset to center the hitbox
+  private startingHitboxOffsetY = 0;
 
   public setAnimationPrefix(prefix: string) {
     this.animationPrefix = prefix;
@@ -52,16 +57,13 @@ export class Player extends Phaser.Physics.Arcade.Sprite {
     this.setBounce(0.2);
     this.setGravityY(1500);
 
-    // Configure hitbox
-    const hitboxWidth = 24; // Narrower for pill shape
-    const hitboxHeight = 70; // Taller for pill shape
-    const hitboxOffsetX = 50; // Adjust offset to center the hitbox
-    const hitboxOffsetY = 58;
-
     // Set hitbox size and position
-    this.body?.setSize(hitboxWidth, hitboxHeight);
-    this.body?.setOffset(hitboxOffsetX, hitboxOffsetY);
-    this.setScale(1.5);
+    this.body?.setSize(this.hitboxWidth, this.hitboxHeight);
+    this.body?.setOffset(
+      this.startingHitboxOffsetX,
+      this.startingHitboxOffsetY
+    );
+    this.setScale(2);
 
     // Set up keyboard controls
     this.cursors = this.scene.input.keyboard!.createCursorKeys();
@@ -104,13 +106,12 @@ export class Player extends Phaser.Physics.Arcade.Sprite {
     const isPlayerOnGround = this.body?.blocked.down;
 
     if (!isPlayerOnGround) {
-      console.log("plauying animation");
-      this.anims.play("jump", true);
+      console.log('plauying animation');
+      this.anims.play('jump', true);
     }
 
     switch (this.controlScheme) {
       case ControlScheme.GAMEPAD:
-        console.log(this.gamepad);
         if (!this.gamepad) return;
         controls = {
           up: this.gamepad.buttons[PlayerControls.UP].value,
@@ -161,15 +162,18 @@ export class Player extends Phaser.Physics.Arcade.Sprite {
       const speed = controls.circleButton ? -this.runSpeed : -this.walkSpeed;
       this.setVelocityX(speed);
       this.setFlipX(false);
-      this.anims.play(`${controls.circleButton ? "run" : "walk"}`, true);
+      this.setOffset(20, 0);
+      this.anims.play(`${controls.circleButton ? 'run' : 'walk'}`, true);
     } else if (controls.right) {
       const speed = controls.circleButton ? this.runSpeed : this.walkSpeed;
       this.setVelocityX(speed);
       this.setFlipX(true);
-      this.anims.play(`${controls.circleButton ? "run" : "walk"}`, true);
+      this.setOffset(10, 0);
+      this.anims.play(`${controls.circleButton ? 'run' : 'walk'}`, true);
     } else {
       this.setVelocityX(0);
-      this.anims.play("idle", true);
+      this.anims.play('idle', true);
+      this.setOffset(0, 0);
     }
   }
 

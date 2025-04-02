@@ -1,5 +1,5 @@
 // src/managers/CountdownManager.ts
-import Phaser from "phaser";
+import Phaser from 'phaser';
 
 export class CountdownManager {
   private scene: Phaser.Scene;
@@ -18,9 +18,9 @@ export class CountdownManager {
       50,
       this.formatTime(this.timeLeft),
       {
-        font: "42px Arial",
-        color: "#ffffff",
-        align: "center",
+        font: '42px Pixelify Sans',
+        color: '#ffffff',
+        align: 'center',
       }
     );
     this.countdownText.setOrigin(0.5);
@@ -45,7 +45,7 @@ export class CountdownManager {
 
   private formatTime(seconds: number): string {
     const partInSeconds = seconds % 60;
-    const partInSecondsString = partInSeconds.toString().padStart(2, "0");
+    const partInSecondsString = partInSeconds.toString().padStart(2, '0');
     return `${partInSecondsString}`;
   }
 

@@ -1,5 +1,5 @@
 // src/managers/ScoreManager.ts
-import Phaser from "phaser";
+import Phaser from 'phaser';
 
 export class ScoreManager {
   private leftPoints: number = 0;
@@ -7,9 +7,10 @@ export class ScoreManager {
   private pointsText: Phaser.GameObjects.Text;
 
   constructor(scene: Phaser.Scene) {
-    this.pointsText = scene.add.text(10, 10, "Left: 0 | Right: 0", {
-      font: "24px Arial",
-      color: "#ffffff",
+    this.pointsText = scene.add.text(10, 10, 'Player One: 0 | Player Two: 0', {
+      font: '24px Pixelify Sans',
+      color: '#ffffff',
+      align: 'center',
     });
   }
 
@@ -39,7 +40,7 @@ export class ScoreManager {
   }
   private updateText() {
     this.pointsText.setText(
-      `Left: ${this.leftPoints} | Right: ${this.rightPoints}`
+      `Player One: ${this.leftPoints} | Player Two: ${this.rightPoints}`
     );
   }
 }

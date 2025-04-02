@@ -1,5 +1,5 @@
 // src/entities/Ball.ts
-import Phaser from "phaser";
+import Phaser from 'phaser';
 
 const OFFSET = 10;
 
@@ -18,7 +18,7 @@ export class Ball extends Phaser.Physics.Arcade.Sprite {
   private netX: number;
 
   constructor(scene: Phaser.Scene, x: number, y: number, netX: number) {
-    super(scene, x, y, "ball");
+    super(scene, x, y, 'ball');
 
     this.scene.physics.world.enable(this);
     this.scene.add.existing(this);
@@ -27,6 +27,7 @@ export class Ball extends Phaser.Physics.Arcade.Sprite {
     this.setBounce(this.bounceEnergy); // Ball loses some energy on bounce
     this.setCollideWorldBounds(true);
     this.setVelocity(200, 200);
+    this.setMaxVelocity(1000);
 
     // Set a lower gravity for more arcady feel
     this.setGravityY(300 * this.gravityFactor);
@@ -46,10 +47,8 @@ export class Ball extends Phaser.Physics.Arcade.Sprite {
 
   public updateBallSide() {
     if (this.x < this.netX) {
-      console.log("LEFT");
       this.currentSide = BallSide.LEFT;
     } else if (this.x > this.netX) {
-      console.log("RIGHT");
       this.currentSide = BallSide.RIGHT;
     } else {
       this.currentSide = BallSide.NEUTRAL;
