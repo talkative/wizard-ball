@@ -101,7 +101,6 @@ export class Player extends Phaser.Physics.Arcade.Sprite {
   public update() {
     let controls;
 
-    console.log(this.controlScheme, "control scheme");
     switch (this.controlScheme) {
       case ControlScheme.GAMEPAD:
         console.log(this.gamepad);

@@ -23,6 +23,20 @@ export class ScoreManager {
     this.updateText();
   }
 
+  public getLeftScore(): number {
+    return this.leftPoints;
+  }
+  public getRightScore(): number {
+    return this.rightPoints;
+  }
+  public resetScores() {
+    this.leftPoints = 0;
+    this.rightPoints = 0;
+    this.updateText();
+  }
+  public destroy() {
+    this.pointsText.destroy();
+  }
   private updateText() {
     this.pointsText.setText(
       `Left: ${this.leftPoints} | Right: ${this.rightPoints}`

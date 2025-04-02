@@ -1,9 +1,10 @@
 // src/scenes/Game.ts
 import Phaser from "phaser";
 import { Player } from "../entities/Player";
-import { Ball } from "../entities/Ball";
+import { Ball, BallSide } from "../entities/Ball";
 import { AnimationManager } from "../managers/AnimationManager";
 import { AssetManager } from "../managers/AssetManager";
+import { CountdownManager } from "../managers/CountdownManager";
 import { ScoreManager } from "../managers/ScoreManager";
 
 export class MainScene extends Phaser.Scene {
@@ -15,8 +16,10 @@ export class MainScene extends Phaser.Scene {
   private ball!: Ball;
   private net!: Phaser.Physics.Arcade.Sprite;
   private scoreManager!: ScoreManager;
+  private countdownManager!: CountdownManager;
   private assetManager!: AssetManager;
   private animationManager!: AnimationManager;
+  private winningScore: number = 3;
 
   constructor() {
     super("MainScene");
@@ -42,8 +45,150 @@ export class MainScene extends Phaser.Scene {
     this.setupCollisions();
     this.setupGravityEffects();
     this.setupGamepadListeners();
-
     this.scoreManager = new ScoreManager(this);
+    this.startMainGameTimer();
+  }
+
+  private startMainGameTimer() {
+    this.countdownManager = new CountdownManager(this, 30, () => {
+      this.handleScoreAndRestart();
+    });
+  }
+
+  private handleScoreAndRestart() {
+    const ballSide = this.ball.getBallSide();
+
+    if (ballSide === BallSide.LEFT) {
+      this.scoreManager.updateLeftScore();
+    } else if (ballSide === BallSide.RIGHT) {
+      this.scoreManager.updateRightScore();
+    }
+
+    if (
+      this.scoreManager.getLeftScore() >= this.winningScore ||
+      this.scoreManager.getRightScore() >= this.winningScore
+    ) {
+      this.endGame();
+    } else {
+      this.freezeGameWhenPlayerScores();
+    }
+  }
+
+  private endGame() {
+    this.physics.pause();
+
+    if (this.countdownManager) {
+      this.countdownManager.destroy();
+    }
+
+    let winningText = "";
+    if (this.scoreManager.getLeftScore() >= this.winningScore) {
+      winningText = "Player One Wins!";
+    } else {
+      winningText = "Player Two Wins!";
+    }
+
+    const gameOverText = this.add.text(
+      this.cameras.main.width / 2,
+      this.cameras.main.height / 2,
+      "Game Over\n" + winningText,
+      {
+        font: "64px Arial",
+        color: "#ffffff",
+        align: "center",
+      }
+    );
+    gameOverText.setOrigin(0.5);
+
+    // Add a restart button
+    const restartButton = this.add.text(
+      this.cameras.main.width / 2,
+      this.cameras.main.height / 2 + 150,
+      "Restart Game",
+      {
+        font: "32px Arial",
+        color: "#ffffff",
+        backgroundColor: "#000000",
+        padding: { x: 20, y: 10 },
+      }
+    );
+    restartButton.setOrigin(0.5);
+    restartButton.setInteractive({ useHandCursor: true });
+    restartButton.on("pointerdown", () => {
+      this.scene.restart();
+    });
+  }
+
+  private freezeGameWhenPlayerScores() {
+    this.physics.pause();
+
+    if (this.countdownManager) {
+      this.countdownManager.destroy();
+    }
+
+    // Show who scored
+    const scoredText = this.add.text(
+      this.cameras.main.width / 2,
+      this.cameras.main.height / 2,
+      this.ball.getBallSide() === BallSide.LEFT
+        ? "Player Two Scored!"
+        : "Player One Scored!",
+      {
+        font: "48px Arial",
+        color: "#ffffff",
+      }
+    );
+    scoredText.setOrigin(0.5);
+
+    // After 3 seconds, restart the round
+    this.time.delayedCall(3000, () => {
+      scoredText.destroy();
+      this.startRoundCountdown();
+      // after 3 seconds do     this.physics.resume();
+
+      this.time.delayedCall(3000, () => {
+        this.physics.resume();
+      });
+
+      // Set ball on a random position side of the net
+      const randomX = Phaser.Math.Between(100, 1100);
+      const randomY = Phaser.Math.Between(100, 600);
+      this.ball.setPosition(randomX, randomY);
+
+      // Start countdown for the next round
+    });
+  }
+
+  private startRoundCountdown() {
+    // Create a 3-second countdown before next round starts
+    const countdownText = this.add.text(
+      this.cameras.main.width / 2,
+      this.cameras.main.height / 2,
+      "3",
+      {
+        font: "72px Arial",
+        color: "#ffffff",
+      }
+    );
+    countdownText.setOrigin(0.5);
+
+    let count = 3;
+    const countdown = this.time.addEvent({
+      delay: 1000,
+      callback: () => {
+        count--;
+        if (count > 0) {
+          countdownText.setText(count.toString());
+        } else {
+          countdownText.setText("Go!");
+          this.time.delayedCall(500, () => {
+            countdownText.destroy();
+            this.startMainGameTimer();
+          });
+        }
+      },
+      repeat: 2,
+    });
   }
 
   private setupBackground() {

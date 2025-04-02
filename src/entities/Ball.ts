@@ -14,12 +14,6 @@ export class Ball extends Phaser.Physics.Arcade.Sprite {
   private minVelocity: number = 50; // Minimum velocity before the ball starts slowing down more
   private gravityFactor: number = 0.8; // Adjust gravity effect (lower = more floaty)
   private bounceEnergy: number = 0.9; // Energy preserved on bounce (0.9 = 90%)
-  // Timer properties
-  private timerDuration: number = 7000; // 7 seconds
-  private timer: number = 60;
-  private timerBar: Phaser.GameObjects.Sprite | null = null;
-  private timerStarted: boolean = false;
-  private tickingSound: Phaser.Sound.BaseSound | null = null;
   private currentSide: BallSide = BallSide.NEUTRAL;
   private netX: number;
 
@@ -50,32 +44,6 @@ export class Ball extends Phaser.Physics.Arcade.Sprite {
     }
   }
 
-  private createTimerBar() {
-    this.timerBar = this.scene.add.sprite(0, 0, "timer-bar");
-    this.timerBar.setOrigin(0.5, 0);
-    this.timerBar.setScale(0.5, 0.2);
-    this.timerBar.setTint(0x00ff00); // Green initially
-    this.updateTimerBarPosition();
-  }
-
-  private updateTimerBarPosition() {
-    if (this.timerBar) {
-      this.timerBar.x = this.x;
-      this.timerBar.y = this.y - this.height - 10;
-
-      // Scale the timer bar based on remaining time
-      const timerRatio = this.timer / this.timerDuration;
-      this.timerBar.scaleX = 0.5 * timerRatio;
-
-      // Change color based on remaining time
-      if (timerRatio < 0.3) {
-        this.timerBar.setTint(0xff0000); // Red when low
-      } else if (timerRatio < 0.6) {
-        this.timerBar.setTint(0xffff00); // Yellow when medium
-      }
-    }
-  }
-
   public updateBallSide() {
     if (this.x < this.netX) {
       console.log("LEFT");
@@ -92,16 +60,6 @@ export class Ball extends Phaser.Physics.Arcade.Sprite {
     if (!this.body) return;
 
     this.updateBallSide();
-
-    if (this.timerStarted) {
-      this.timer -= delta;
-      this.updateTimerBarPosition();
-
-      // If timer runs out, explode
-      if (this.timer <= 0) {
-        // this.explode();
-      }
-    }
 
     // Apply damping to velocity
     const velocityX = this.body.velocity.x * this.damping;
@@ -146,6 +104,10 @@ export class Ball extends Phaser.Physics.Arcade.Sprite {
         this.setAngularVelocity(0);
       }
     }
+  }
+
+  public getBallSide() {
+    return this.currentSide;
   }
 
   // Add method to apply force (like when hit by players)
