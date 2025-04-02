@@ -19,6 +19,9 @@ const config: Types.Core.GameConfig = {
     autoCenter: Phaser.Scale.CENTER_BOTH,
   },
   scene: [MainScene],
+  input: {
+    gamepad: true,
+  },
 };
 
 export default new Game(config);
