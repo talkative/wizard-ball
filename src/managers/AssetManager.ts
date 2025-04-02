@@ -21,76 +21,58 @@ export class AssetManager {
   }
 
   private preloadSpritesheets() {
-    this.scene.load.spritesheet(
-      "player-walk",
-      "/assets/Lightning Mage/Walk.png",
-      {
-        frameWidth: 128,
-        frameHeight: 128,
-      }
-    );
+    this.scene.load.spritesheet("player-walk", "/assets/Liam/Liam_Run.png", {
+      frameWidth: 76,
+      frameHeight: 103,
+    });
+    this.scene.load.spritesheet("player-run", "/assets/Liam/Liam_Run.png", {
+      frameWidth: 76,
+      frameHeight: 103,
+    });
 
-    this.scene.load.spritesheet(
-      "player-idle",
-      "/assets/Lightning Mage/Idle.png",
-      {
-        frameWidth: 128,
-        frameHeight: 128,
-      }
-    );
+    this.scene.load.spritesheet("player-idle", "/assets/Liam/Liam_Idle.png", {
+      frameWidth: 43.5,
+      frameHeight: 103,
+    });
 
-    this.scene.load.spritesheet(
-      "player-run",
-      "/assets/Lightning Mage/Run.png",
-      {
-        frameWidth: 128,
-        frameHeight: 128,
-      }
-    );
-
-    this.scene.load.spritesheet(
-      "player-attack",
-      "/assets/Lightning Mage/Attack_2.png",
-      {
-        frameWidth: 128,
-        frameHeight: 128,
-      }
-    );
+    this.scene.load.spritesheet("player-jump", "/assets/Liam/Liam_Jump.png", {
+      frameWidth: 44,
+      frameHeight: 96,
+    });
 
     // Player 2 spritesheets (add your second character here)
     this.scene.load.spritesheet(
       "player2-walk",
-      "/assets/Fire vizard/Walk.png", // Replace with your second character path
+      "/assets/Simon/Simon_Run.png", // Replace with your second character path
       {
-        frameWidth: 128,
-        frameHeight: 128,
+        frameWidth: 76,
+        frameHeight: 103,
+      }
+    );
+    this.scene.load.spritesheet(
+      "player2-run",
+      "/assets/Simon/Simon_Run.png", // Replace with your second character path
+      {
+        frameWidth: 76,
+        frameHeight: 103,
       }
     );
 
     this.scene.load.spritesheet(
       "player2-idle",
-      "/assets/Fire vizard/Idle.png", // Replace with your second character path
+      "/assets/Simon/Simon_Idle.png", // Replace with your second character path
       {
-        frameWidth: 128,
-        frameHeight: 128,
+        frameWidth: 27,
+        frameHeight: 64,
       }
     );
 
     this.scene.load.spritesheet(
-      "player2-run",
-      "/assets/Fire vizard/Run.png", // Replace with your second character path
+      "player2-jump",
+      "/assets/Simon/Simon_Jump.png", // Replace with your second character path
       {
-        frameWidth: 128,
-        frameHeight: 128,
-      }
-    );
-
-    this.scene.load.spritesheet(
-      "player2-attack",
-      "/assets/Fire vizard/Attack_2.png", // Replace with your second character path
-      {
-        frameWidth: 128,
-        frameHeight: 128,
+        frameWidth: 44,
+        frameHeight: 96,
       }
     );
   }

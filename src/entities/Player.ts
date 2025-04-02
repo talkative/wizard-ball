@@ -101,6 +101,13 @@ export class Player extends Phaser.Physics.Arcade.Sprite {
   public update() {
     let controls;
 
+    const isPlayerOnGround = this.body?.blocked.down;
+
+    if (!isPlayerOnGround) {
+      console.log("plauying animation");
+      this.anims.play("jump", true);
+    }
+
     switch (this.controlScheme) {
       case ControlScheme.GAMEPAD:
         console.log(this.gamepad);
@@ -146,7 +153,6 @@ export class Player extends Phaser.Physics.Arcade.Sprite {
     if (controls) {
       this.handleMovement(controls);
       this.handleJump(controls);
-      this.handleAttack(controls);
     }
   }
 
@@ -154,12 +160,12 @@ export class Player extends Phaser.Physics.Arcade.Sprite {
     if (controls.left) {
       const speed = controls.circleButton ? -this.runSpeed : -this.walkSpeed;
       this.setVelocityX(speed);
-      this.setFlipX(true);
+      this.setFlipX(false);
       this.anims.play(`${controls.circleButton ? "run" : "walk"}`, true);
     } else if (controls.right) {
       const speed = controls.circleButton ? this.runSpeed : this.walkSpeed;
       this.setVelocityX(speed);
-      this.setFlipX(false);
+      this.setFlipX(true);
       this.anims.play(`${controls.circleButton ? "run" : "walk"}`, true);
     } else {
       this.setVelocityX(0);
@@ -192,13 +198,8 @@ export class Player extends Phaser.Physics.Arcade.Sprite {
       if (!canJump) {
         this.jumpsAvailable--;
       }
-      this.setVelocityY(this.jumpSpeed);
-    }
-  }
 
-  private handleAttack(controls: any) {
-    if (controls.squareButton) {
-      this.anims.play("attack", true);
+      this.setVelocityY(this.jumpSpeed);
     }
   }
 }

@@ -13,7 +13,7 @@ export class AnimationManager {
       key: `${prefix}-idle-anim`,
       frames: this.scene.anims.generateFrameNumbers(`${prefix}-idle`, {
         start: 0,
-        end: 7,
+        end: 4,
       }),
       frameRate: 10,
       repeat: -1,
@@ -35,9 +35,9 @@ export class AnimationManager {
       key: "run",
       frames: this.scene.anims.generateFrameNumbers("player-run", {
         start: 0,
-        end: 9,
+        end: 5,
       }),
-      frameRate: 10,
+      frameRate: 60,
       repeat: -1,
     });
 
@@ -45,19 +45,19 @@ export class AnimationManager {
       key: "idle",
       frames: this.scene.anims.generateFrameNumbers("player-idle", {
         start: 0,
-        end: 3,
+        end: 4,
       }),
       frameRate: 10,
       repeat: -1,
     });
 
     this.scene.anims.create({
-      key: "attack",
-      frames: this.scene.anims.generateFrameNumbers("player-attack", {
+      key: "jump",
+      frames: this.scene.anims.generateFrameNumbers("player-jump", {
         start: 0,
-        end: 7,
+        end: 1,
       }),
-      frameRate: 10,
+      frameRate: 1,
       repeat: -1,
     });
   }
